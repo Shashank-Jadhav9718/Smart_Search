@@ -1,0 +1,108 @@
+/* --- Define Your Custom Colors --- */
+:root {
+    --primary-purple: #8e44ad;       /* A strong, deep purple */
+    --light-purple: #a569bd;        /* A lighter purple for hover/accents */
+    --heading-purple: #c39bd3;      /* A soft, light purple for text headings */
+    --dark-bg: #120e1e;             /* Very dark purple-black background */
+    --dark-container: #1d182e;      /* Lighter dark purple for sidebar, forms, etc. */
+    --text-color: #FAFAFA;
+    --text-light: #D1D1D1;
+    --border-radius: 8px;
+    --danger-red: #922b21;          /* Dark red for delete buttons */
+    --danger-red-hover: #c0392b;   /* Brighter red for hover */
+}
+
+/* --- Main App Background --- */
+[data-testid="stAppViewContainer"] {
+    background-color: var(--dark-bg);
+}
+
+/* --- Sidebar --- */
+[data-testid="stSidebar"] {
+    background-color: var(--dark-container);
+    border-right: 1px solid var(--primary-purple);
+}
+
+/* --- Main Content Containers --- */
+/* Style forms, expanders, and info boxes */
+[data-testid="stForm"], 
+[data-testid="stExpander"],
+.stAlert {
+    background-color: var(--dark-container);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+}
+
+/* --- Text and Headings --- */
+h1, h2, h3 {
+    color: var(--heading-purple);
+}
+.stMarkdown, .stText, .stAlert, .stFileUploader label {
+    color: var(--text-color);
+}
+.stCaption {
+    color: var(--text-light);
+}
+
+/* --- Buttons --- */
+.stButton > button {
+    background-color: var(--primary-purple);
+    color: var(--text-color);
+    border: none;
+    border-radius: var(--border-radius);
+    transition: all 0.3s ease;
+    padding: 0.5rem 1rem;
+}
+.stButton > button:hover {
+    background-color: var(--light-purple);
+    transform: scale(1.02);
+}
+.stButton > button:disabled {
+    background-color: #333;
+    color: #888;
+}
+
+/* Special: Red "primary" buttons (like "Delete") */
+.stButton > button[kind="primary"] {
+    background-color: var(--danger-red);
+    color: var(--text-color);
+}
+.stButton > button[kind="primary"]:hover {
+    background-color: var(--danger-red-hover);
+}
+
+/* --- Widgets --- */
+/* Dataframes */
+[data-testid="stDataFrame"] {
+    border-radius: var(--border-radius);
+    overflow: hidden; /* Applies radius to the table */
+}
+.stDataFrame th { /* Header */
+    background-color: var(--primary-purple);
+    color: var(--text-color);
+    font-size: 1rem;
+}
+.stDataFrame td { /* Cells */
+    background-color: var(--dark-container);
+}
+
+/* Chat Messages */
+[data-testid="stChatMessage"][data-testid="chat-message-container-user"] {
+    background-color: var(--primary-purple);
+    border-radius: var(--border-radius);
+}
+[data-testid="stChatMessage"][data-testid="chat-message-container-assistant"] {
+    background-color: var(--dark-container);
+    border-radius: var(--border-radius);
+}
+
+/* Tabs in Admin Panel */
+.stTabs [data-baseweb="tab"] {
+    background-color: transparent;
+    color: var(--text-light);
+}
+.stTabs [data-baseweb="tab"][aria-selected="true"] {
+    background-color: var(--dark-container);
+    color: var(--heading-purple);
+    font-weight: bold;
+}

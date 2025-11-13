@@ -1,0 +1,15 @@
+streamlit
+streamlit-authenticator
+sqlalchemy
+bcrypt
+pypdf
+langchain
+langchain-community
+langchain-huggingface
+sentence-transformers
+faiss-cpu
+python-dotenv
+plotly
+langchain_core
+langchain_text_splitters
+langchain_classic
