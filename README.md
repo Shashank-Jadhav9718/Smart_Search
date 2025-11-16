@@ -2,7 +2,9 @@
 
 ## 🌟 Project Overview
 
-**Smart Search** is a final-year computer science capstone project that transforms a basic PDF Q&A script into a secure, full-featured, and persistent web application. It utilizes **Retrieval-Augmented Generation (RAG)** to provide fast, accurate answers from uploaded documents, featuring robust multi-user management and administrative oversight.
+**Smart Search** is a final-year computer science capstone project that transforms a basic PDF Q&A script into a secure, full-featured, and persistent web application. It utilizes **Retrieval-Augmented Generation (RAG)** to provide fast, accurate, and **100% private** answers from uploaded documents, featuring robust multi-user management and administrative oversight.
+
+This version runs entirely locally using **Ollama**, meaning **no API keys are required** and no data ever leaves your machine.
 
 **Final Status:** Fully functional, secure prototype ready for testing and deployment.
 
@@ -18,15 +20,15 @@ The system is designed with security and persistence in mind, offering distinct 
 * **User Isolation:** Documents and vector indices (**FAISS**) are stored in dedicated, per-user file directories (`data/user_{id}/`).
 
 ### 🤖 RAG & Document Processing
-* **Advanced Q&A:** Uses **OpenAI GPT-3.5** (via API) for highly accurate answer generation.
+* **Local & Private Q&A:** Uses a **Local LLM (Ollama)** for private, offline, and no-cost answer generation (e.g., `mistral`).
 * **OCR Integration:** Features Optical Character Recognition (**Tesseract OCR**) fallback to successfully extract text and answer questions from **scanned or image-based PDFs**.
 * **Cost-Effective Embeddings:** Utilizes the **free, local** Hugging Face embedding model (`all-MiniLM-L6-v2`) for cost-efficient vectorization.
 
 ### 📊 Admin Dashboard
 * **User Management:** Admins can view, create, and securely delete user accounts (with automatic cleanup of user files).
-* **Audit Logging:** Tracks all critical user actions (`LOGIN`, `UPLOAD`, `QUERY`) for a full audit trail.
+* **Audit Logging:** Tracks all critical user actions (`LOGIN`, `UPLOAD`, `QUERY`, `ERROR`) for a full audit trail.
 * **Document Management:** Centralized view of all user-uploaded documents with file cleanup functionality.
-* **System Analytics:** Metrics and visualizations of overall system activity.
+* **System Analytics:** Metrics and visualizations (via Plotly) of overall system activity.
 
 ---
 
@@ -37,16 +39,15 @@ The project uses a standard multi-tier architecture implemented with Python and 
 ### Stack
 | Component | Technology | Purpose |
 | :--- | :--- | :--- |
-| **Frontend/UI** | Streamlit, Custom CSS | Interactive web application and dark/purple theme. |
+| **Frontend/UI** | Streamlit | Interactive web application. |
 | **Backend** | Python, LangChain | Application routing, RAG pipeline orchestration. |
+| **LLM (Local)** | **Ollama (Mistral)** | Local, private, no-cost answer generation. |
 | **Database** | SQLite, SQLAlchemy | Persistent storage for users, documents, and logs. |
 | **Vector Store** | FAISS, HuggingFaceEmbeddings | Efficient indexing and retrieval of document chunks. |
 | **OCR** | Tesseract, PyTesseract | Text extraction from image-based PDFs. |
+| **PDF Conversion** | Poppler, pdf2image | Converts PDF pages to images for OCR. |
 
 ### Database Schema (`SmartSearchDB`)
-
-The system is built on three linked tables:
-
 * **Users** `(id, username, hashed_password, role)`
     * (1) -> (M) relationship with `Documents` and `Logs`.
 * **Documents** `(id, user_id [FK], filename, file_path, chunk_count)`
@@ -58,86 +59,22 @@ The system is built on three linked tables:
 
 Follow these steps to set up the environment and run the application locally.
 
-### Prerequisites
+### Prerequisites (Crucial)
 
-1.  **Python 3.9+** installed.
-2.  **OpenAI API Key** (required for the LLM).
-3.  **Tesseract OCR:** Must be installed as a system executable.
-    * **Windows:** Download the installer from the [UB-Mannheim Tesseract Wiki](https://github.com/UB-Mannheim/tesseract/wiki).
-    * **Linux/Mac:** Install via package manager (`sudo apt install tesseract-ocr` or `brew install tesseract`).
-    * ***Note:** The default installation path for Tesseract on Windows (`C:\Program Files\Tesseract-OCR\`) is hardcoded in `rag_pipeline.py`.*
+This project relies on three external "engines" that must be installed on your system and added to your **System PATH**.
 
-### Step-by-Step Guide
+1.  **Ollama:**
+    * Download and install the [Ollama application](https://ollama.com/).
+2.  **Tesseract OCR (The "Eyes"):**
+    * Download the installer from the [UB-Mannheim Tesseract Wiki](https://github.com/UB-Mannheim/tesseract/wiki).
+    * **Add to System PATH:** The installer usually does this, but confirm that `C:\Program Files\Tesseract-OCR` is in your System Environment `Path`.
+3.  **Poppler (The "PDF-to-Image Converter"):**
+    * Download the latest `.zip` release from [Poppler for Windows](https://github.com/oschwartz10612/poppler-windows/releases/).
+    * Create a folder `C:\poppler` and extract the zip's contents into it.
+    * **Add to System PATH:** Manually add the `bin` folder to your System `Path`: `C:\poppler\poppler-24.02.0-0\Library\bin` (or your version).
 
-1.  **Clone the Repository** (or create the folder structure):
-    ```bash
-    mkdir smart-search-project
-    cd smart-search-project
-    mkdir data  # Empty folder for user data
-    touch .env  # File for API keys
-    ```
-
-2.  **Create and Activate Virtual Environment:**
-    ```bash
-    python -m venv venv
-    # Windows:
-    .\venv\Scripts\activate
-    # Linux/Mac:
-    source venv/bin/activate
-    ```
-
-3.  **Populate `requirements.txt`:**
-    Create a file named `requirements.txt` and paste the following dependencies into it:
-    ```
-    streamlit
-    streamlit-authenticator
-    sqlalchemy
-    bcrypt
-    pypdf
-    langchain
-    langchain-community
-    langchain-openai
-    langchain_core
-    langchain_text_splitters
-    langchain_classic
-    faiss-cpu
-    python-dotenv
-    plotly
-    pdf2image
-    pytesseract
-    sentence-transformers
-    ```
-
-4.  **Install Libraries:**
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-5.  **Configure API Key:**
-    Open the `.env` file and add your OpenAI API key:
-    ```env
-    OPENAI_API_KEY=sk-...your-secret-key-here
-    ```
-
-6.  **Initialize Database & Admin User:**
-    Run the `auth.py` script once to create the database file (`users.db`) and the default admin user:
-    ```bash
-    python auth.py
-    ```
-
-7.  **Run the Application:**
-    ```bash
-    streamlit run app.py
-    ```
-
----
-
-## 🔑 Usage and Credentials
-
-### Default Credentials
-| Role | Username | Password | Notes |
-| :--- | :--- | :--- | :--- |
-| **Admin** | `admin` | `admin` | Used for system testing and management. |
-
-### Testing OCR
-To test the OCR functionality, log in as a regular user, upload a PDF that is known to be a **scanned image** (like a screenshot saved as a PDF), and click "Process Documents." You will see the OCR process activate in the terminal before the vector store is created.
+**Verify Installation:** After installing all three and restarting your terminal, these commands should work:
+```bash
+ollama --version
+where tesseract
+pdfinfo -v
