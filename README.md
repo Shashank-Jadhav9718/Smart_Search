@@ -54,27 +54,3 @@ The project uses a standard multi-tier architecture implemented with Python and 
 * **Logs** `(id, user_id [FK], timestamp, action, details)`
 
 ---
-
-## 🚀 Setup & Installation
-
-Follow these steps to set up the environment and run the application locally.
-
-### Prerequisites (Crucial)
-
-This project relies on three external "engines" that must be installed on your system and added to your **System PATH**.
-
-1.  **Ollama:**
-    * Download and install the [Ollama application](https://ollama.com/).
-2.  **Tesseract OCR (The "Eyes"):**
-    * Download the installer from the [UB-Mannheim Tesseract Wiki](https://github.com/UB-Mannheim/tesseract/wiki).
-    * **Add to System PATH:** The installer usually does this, but confirm that `C:\Program Files\Tesseract-OCR` is in your System Environment `Path`.
-3.  **Poppler (The "PDF-to-Image Converter"):**
-    * Download the latest `.zip` release from [Poppler for Windows](https://github.com/oschwartz10612/poppler-windows/releases/).
-    * Create a folder `C:\poppler` and extract the zip's contents into it.
-    * **Add to System PATH:** Manually add the `bin` folder to your System `Path`: `C:\poppler\poppler-24.02.0-0\Library\bin` (or your version).
-
-**Verify Installation:** After installing all three and restarting your terminal, these commands should work:
-```bash
-ollama --version
-where tesseract
-pdfinfo -v
